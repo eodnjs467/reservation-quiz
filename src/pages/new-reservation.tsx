@@ -1,17 +1,27 @@
 import Title from "../components/title";
 import {useForm} from "react-hook-form";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import ModalDate from "../components/modal-date";
+import {useReservationDispatch} from "../context/reservation-context";
+import {useNavigate} from "react-router-dom";
 
 export default function NewReservation(){
+  const navigate = useNavigate();
+  const dispatch = useReservationDispatch();
+
+  const ref = useRef<HTMLSelectElement | null>(null);
   const [guests, setGuests] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm({mode: "onSubmit"});
 
+
   const onSubmit = (data: any) => {
-    console.log({...data, guests});
+    const formData = {...data, guests, date: 'Jan 07 ', time: '13:18', table: ref.current!.value}
+    dispatch({type: "CREATE", data: formData});
+    navigate("/");
   }
+  //TODO: Date 구현
   const onClickDate = () => {
     console.log('onclick Date');
     setIsOpen(prev => !prev);
@@ -50,7 +60,7 @@ export default function NewReservation(){
               <span className={"text-2xl mx-5"}>{guests}</span>
               <img className={"border rounded-lg"} src={"/assets/math-plus.svg"} alt={"plus"} onClick={handlePlus} />
             </div>
-            <select className={"w-1/2 border rounded-lg p-3"}>
+            <select className={"w-1/2 border rounded-lg p-3"} ref={ref}>
               <option value={""}>Select Table</option>
               <option value={1}>1</option>
               <option value={2}>2</option>
