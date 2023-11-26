@@ -4,16 +4,19 @@ import Reservation from "./pages/reservation";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import NewReservation from "./pages/new-reservation";
 import EditReservation from "./pages/edit-reservation";
+import {ReservationContextProvider} from "./context/reservation-context";
 
 function App() {
   return (
-      <BrowserRouter>
-        <Routes>
-          <Route path={"/"} element={<Reservation />}/>
-          <Route path={"/add-reservation"} element={<NewReservation />}/>
-          <Route path={"/edit-reservation"} element={<EditReservation />} />
-        </Routes>
-      </BrowserRouter>
+      <ReservationContextProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path={"/"} element={<Reservation />}/>
+            <Route path={"/add-reservation"} element={<NewReservation />}/>
+            <Route path={"/edit/:id"} element={<EditReservation />} />
+          </Routes>
+        </BrowserRouter>
+      </ReservationContextProvider>
   );
 }
 
