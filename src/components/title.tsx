@@ -5,9 +5,8 @@ export default function Title({ addButton, title }: {
   title: string;
 }) {
   const navigate = useNavigate();
-  const handleAddClick = () => {
-    navigate('/add-reservation');
-  }
+  const handleAddClick = () => navigate('/add-reservation');
+  const onClosed = () => navigate('/');
 
   return (
       <div className="flex flex-row justify-between items-center mx-5 my-5">
@@ -17,10 +16,10 @@ export default function Title({ addButton, title }: {
                 <img src={"/assets/add.svg"} alt={"add"}/>
                 <span className={"text-orange-500"}>New Reservation</span>
               </div>
-          ): <img src={"/assets/keyboard_backspace.svg"} alt={"back"} onClick={() => navigate(-1)}/>}
+          ) : <img src={"/assets/keyboard_backspace.svg"} alt={"back"} onClick={() => navigate(-1)}/>}
         </div>
         <h1 className={"text-2xl"}>{title}</h1>
-        <div>
+        <div onClick={onClosed}>
           <img src={"/assets/close.svg"} alt={'closed'}/>
         </div>
       </div>
