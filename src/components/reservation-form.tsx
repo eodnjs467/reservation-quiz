@@ -32,6 +32,10 @@ export default function ReservationForm({data}: {data?: Reservation}) {
   const handleMinus = () => {
     setGuests(prev => prev - 1);
   }
+  const onDelete = () => {
+    dispatch({type: "DELETE", id: data!.id});
+    navigate('/');
+  }
   return(
       <div className={"mx-5"}>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -79,7 +83,15 @@ export default function ReservationForm({data}: {data?: Reservation}) {
                       {...register("description")}
             />
           </div>
+          <div className={"flex"}>
+          {data &&
+            <button className={'border p-3 mr-5 rounded-lg shadow-lg'} onClick={onDelete}>
+              <img src={'/assets/trash.svg'} alt={'delete'}/>
+            </button>
+          }
           <button className={"w-full py-4 rounded bg-red-600 text-white"}>Save</button>
+          </div>
+
         </form>
       </div>
   )
