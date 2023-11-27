@@ -1,7 +1,7 @@
 import React, {createContext, Dispatch, useContext, useReducer} from "react";
 import Reservation from "../pages/reservation";
 
-type Reservation = {
+export type Reservation = {
   id: number;
   name: string;
   phone: string;
@@ -12,7 +12,7 @@ type Reservation = {
   description: string;
 }
 
-type ReservationState = Reservation[];
+export type ReservationState = Reservation[];
 
 type Action =
     | { type: 'DELETE'; id: number; }
