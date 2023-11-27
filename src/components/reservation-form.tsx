@@ -44,7 +44,7 @@ export default function ReservationForm({data}: {data?: Reservation}) {
                      required: true,
                    })}
             />
-            <div className={"flex flex-wrap justify-center items-center border rounded w-full"} onClick={onClickDate}>
+            <div className={"flex flex-wrap justify-center items-center border rounded-2xl w-full shadow-lg"} onClick={onClickDate}>
               {isOpen ? (<ModalDate />) : (
                   <>
                     <img src={"/assets/event_available.svg"} alt={"Date"}/>
@@ -56,9 +56,9 @@ export default function ReservationForm({data}: {data?: Reservation}) {
           <div className={"flex justify-between mb-5"}>
             <div className={"flex items-center"}>
               <span className={"mr-3"}>Guests</span>
-              <img className={"border rounded-lg"} src={"/assets/math-minus.svg"} alt={"minus"} onClick={handleMinus} />
+              <img className={"border rounded-lg shadow-lg"} src={"/assets/math-minus.svg"} alt={"minus"} onClick={handleMinus} />
               <span className={"text-2xl mx-5"}>{guests}</span>
-              <img className={"border rounded-lg"} src={"/assets/math-plus.svg"} alt={"plus"} onClick={handlePlus} />
+              <img className={"border rounded-lg shadow-lg"} src={"/assets/math-plus.svg"} alt={"plus"} onClick={handlePlus} />
             </div>
             <select className={"w-1/2 border rounded-lg p-3"}
                     {...register("table")}>
@@ -79,7 +79,7 @@ export default function ReservationForm({data}: {data?: Reservation}) {
                       {...register("description")}
             />
           </div>
-          <button className={"w-full py-4 rounded bg-gradient-to-r from-purple-500 to-pink-500"}>Save</button>
+          <button className={"w-full py-4 rounded bg-red-600 text-white"}>Save</button>
         </form>
       </div>
   )

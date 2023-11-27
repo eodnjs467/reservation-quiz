@@ -10,7 +10,7 @@ export default function Title({ addButton, title }: {
 
   return (
       <div className="flex flex-row justify-between items-center mx-5 my-5">
-        <div className={'border rounded-lg'}>
+        <div className={'border rounded-lg shadow-lg'}>
           {addButton ? (
               <div className={"flex m-3"} onClick={handleAddClick}>
                 <img src={"/assets/add.svg"} alt={"add"}/>
