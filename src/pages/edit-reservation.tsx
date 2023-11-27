@@ -1,12 +1,17 @@
 import Title from "../components/title";
+import {useParams} from "react-router-dom";
+import {useReservationState} from "../context/reservation-context";
+import ReservationForm from "../components/reservation-form";
 
 export default function EditReservation() {
+  const { id } = useParams();
+  const reservations = useReservationState();
+  const reservation = reservations.find(r => r.id === Number(id));
+
   return(
       <>
         <Title title={"Edit Reservation"} />
-        <div>
-        {/*  form 컴포넌트 만들어서 데이터 넘겨줘야겠네 아이디 있으면  edit 이면 save 아니고 seated*/}
-        </div>
+        <ReservationForm data={reservation}/>
       </>
   )
 }
