@@ -8,7 +8,7 @@ export default function Reservation() {
       <>
         <Title title={'Reservation'} addButton={true}/>
         <div className={"grid grid-cols-3"}>
-        {reservations.map(reservation => <Card
+        {reservations.map(reservation => !reservation.seated && <Card
             key={reservation.id}
             id={reservation.id}
             name={reservation.name}

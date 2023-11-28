@@ -16,10 +16,8 @@ export default function Card(
   const onDelete = () => {
     dispatch({type: 'DELETE', id});
   }
-  // TODO: onSeated 기능 알아보고 작성
   const onSeated = () => {
-    console.log('seated');
-
+    dispatch({type: 'FINISH', id});
   }
   return(
       <div className={"m-3 border rounded-lg p-5 shadow-lg"}>
