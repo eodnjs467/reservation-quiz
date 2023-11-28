@@ -1,15 +1,78 @@
 import ModalDate from "./modal-date";
 import {useForm} from "react-hook-form";
-import {useState} from "react";
+import React, {useState} from "react";
 import {Reservation, useReservationDispatch} from "../context/reservation-context";
 import {useNavigate} from "react-router-dom";
 
-export default function ReservationForm({data}: {data?: Reservation}) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function ReservationForm({data}: {data?: Reservation }) {
+
   const dispatch = useReservationDispatch();
   const navigate = useNavigate();
   const [guests, setGuests] = useState(data?.guests ?? 1);
+  const [isOpen, setIsOpen] = useState(false);
+  const [date, setDate] = useState('2023-11-28');
+  const [time, setTime] = useState('01:00');
+  const hour = time.split(':')[0];
+  const minute = time.split(':')[1];
+  let meridiem = Number(hour) > 0 && Number(hour) < 13 ? 'am' : 'pm';
 
+  const onClose = () => {
+    setIsOpen(false);
+  }
+  const onChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(e.target.value);
+  }
+  const onChangeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTime(e.target.value);
+  }
+  const onIncreaseHour = () => {
+    if(Number(hour) + 1 === 24) {
+      setTime('00:00');
+      return;
+    }
+    if(Number(hour)+1 > 24) {
+      setTime(`01:${minute}`);
+      return;
+    }
+    setTime(`${Number(hour) < 9 ? '0' + (Number(hour) + 1) : Number(hour)+1}:${minute}`);
+  }
+  const onDecreaseHour = () => {
+    const hour = time.split(':')[0];
+    const minute = time.split(':')[1];
+    if(Number(hour)-1 < 1) {
+      setTime(`12:${minute}`)
+      return;
+    }
+    setTime(`${Number(hour) < 11 ? '0' + (Number(hour) - 1) : Number(hour)-1}:${minute}`);
+  }
+  const onIncreaseMinute = () => {
+    const hour = time.split(":")[0];
+    const minute = Number(time.split(':')[1]);
+    if(Number(minute+1 > 59)){
+      setTime(`${hour}:00`);
+      return;
+    }
+    setTime(`${hour}:${minute < 9 ? '0' + (Number(minute) + 1) : Number(minute) + 1}`);
+  }
+  const onDecreaseMinute = () => {
+    const hour = time.split(":")[0];
+    const minute = Number(time.split(':')[1]);
+    if(Number(minute) -1 <0){
+      setTime(`${hour}:59`);
+      return;
+    }
+    setTime(`${hour}:${minute < 11 ? '0' + (Number(minute) - 1) : Number(minute) - 1}`);
+  }
+  const onChangeMeridiem = () => {
+    if(Number(hour) + 12 < 24){
+      setTime(`${Number(hour) + 12}:${minute}`);
+      return;
+    }
+    if(Number(hour) + 12 > 24){
+      setTime(`0${Math.abs(Number(hour) - 12)}:${minute}`);
+      return;
+    }
+  }
   const {register, handleSubmit} = useForm({defaultValues: {
       name: data?.name ?? '',
       phone: data?.phone ?? '',
@@ -20,12 +83,11 @@ export default function ReservationForm({data}: {data?: Reservation}) {
     }});
 
   const onSubmit = (formData: any) => {
-    const formDataFormat = {...formData, guests};
+    const formDataFormat = {...formData, guests, date, time};
     if(data) dispatch({type: "UPDATE", data: {id: data.id, ...formDataFormat}});
     if(!data) dispatch({type: "CREATE", data: formDataFormat});
     navigate("/");
   }
-  const onClickDate = () => {}
   const handlePlus = () => {
     setGuests(prev => prev + 1);
   }
@@ -48,13 +110,9 @@ export default function ReservationForm({data}: {data?: Reservation}) {
                      required: true,
                    })}
             />
-            <div className={"flex flex-wrap justify-center items-center border rounded-2xl w-full shadow-lg"} onClick={onClickDate}>
-              {isOpen ? (<ModalDate />) : (
-                  <>
-                    <img src={"/assets/event_available.svg"} alt={"Date"}/>
-                    <span>Select Date</span>
-                  </>
-              )}
+            <div className={"flex flex-wrap justify-center items-center border rounded-2xl w-full shadow-lg"} onClick={() => setIsOpen(true)}>
+              <img src={"/assets/event_available.svg"} alt={"Date"}/>
+              <span>Select Date</span>
             </div>
           </div>
           <div className={"flex justify-between mb-5"}>
@@ -91,8 +149,19 @@ export default function ReservationForm({data}: {data?: Reservation}) {
           }
           <button className={"w-full py-4 rounded bg-red-600 text-white"}>Save</button>
           </div>
-
         </form>
+        {isOpen && <ModalDate
+            meridiem={meridiem}
+            onChangeMeridiem={onChangeMeridiem}
+            onChangeDate={onChangeDate}
+            onChangeTime={onChangeTime}
+            date={date}
+            time={time}
+            addHour={onIncreaseHour}
+            addMinute={onIncreaseMinute}
+            minusHour={onDecreaseHour}
+            minusMinute={onDecreaseMinute}
+            closed={onClose}/>}
       </div>
   )
 }
